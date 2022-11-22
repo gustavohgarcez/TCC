@@ -1,0 +1,23 @@
+.form-control-light {
+    color: #313A46;
+    background-color: var(--bs-light);
+    border-color: var(--bs-gray);
+}
+.form-control-light:focus {
+    color: #313A46;
+    background-color: var(--bs-light);
+    border-color: #313A46;
+    box-shadow: 0 0 0 .25rem rgba(49, 58, 70, 0.25);
+}
+
+.btn {
+    color: #313A46;
+    background-color: var(--bs-light);
+    border-color: var(--bs-gray);
+}
+.btn-outline-dark:focus {
+    color: white;
+    background-color: #313A46;
+    border-color: #313A46;
+    box-shadow: 0 0 0 .25rem rgba(49, 58, 70, 0.25);
+}

@@ -1,0 +1,57 @@
+.space15 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.space10 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.line {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+legend{
+    text-align: center;
+    margin: 0%;
+}
+
+.nav-link {
+    color: #313A46;
+    background-color: var(--bs-light);
+    border-color: var(--bs-gray);
+}
+.nav-link-dark:hover {
+    color: white;
+    background-color: #313A46;
+    border-color: #313A46;
+}
+
+.comment {
+    font-size: 15px;
+    color: black;
+    text-align: left;
+    margin: 0%;
+}
+
+.comment1 {
+    font-size: 12px;
+    font-style: italic;
+    color: black;
+    text-align: left;
+    margin: 0%;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+    text-align: left;
+    margin: 0%;
+}
+
+.b-card{
+    background-color: #F5F5F5;
+}
