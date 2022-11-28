@@ -1,11 +1,14 @@
 <?php
+	session_start();
 	include_once ("../banco/manipuladados.php");
 	$manipula = new manipuladados();
 	
 	$login = $_POST['txtNome'];
     $password = $_POST['txtSenha'];
 	$linhas = $manipula->validarLogin($login,$password); 
-       
+
+	$_SESSION['funcionario']=$login;
+
 	if($linhas == 0){
 		echo '<script>alert("Usuário ou Senha do Adm não cadastrado ou incorreto(s) ");</script>';	
 		echo "<script>location = 'login.php';</script>";

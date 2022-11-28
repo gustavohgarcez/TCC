@@ -83,6 +83,18 @@ class manipulaDados extends conexao{
         $this->qr = self::execSQL($this->sql);    
         $linhas = @mysqli_num_rows($this->qr);
         return $linhas;
-    }	
+    }
+
+    public function getIdUsuarioByNome($nome){
+        $this->sql = "SELECT id FROM $this->table WHERE nome = '$nome'";
+        $this->qr = self::execSQL($this->sql);
+        return $this->qr;
+    }
+
+    public function getNomeUsuarioById($id){
+        $this->sql = "SELECT nome FROM $this->table WHERE id = '$id'";
+        $this->qr = self::execSQL($this->sql);
+        return $this->qr;
+    }
 }
 ?>

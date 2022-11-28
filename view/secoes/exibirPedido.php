@@ -5,6 +5,8 @@
     include_once ("../banco/manipuladados.php");
 	$busca = new manipuladados(); 
     $resultado = $busca->exibirCadastrado($id);
+
+    $nomeFuncionario = $_SESSION['funcionario'];
 ?>
 <html>
 <!--CSS-->
@@ -15,6 +17,15 @@
         <fieldset class="border p-2">
             <?php
 				while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
+                    $busca->setTable("tb_usuario");
+                    $outroResultado = $busca->getNomeUsuarioById($row['funcionario']);
+                    $nome = "";
+                
+                    while($outroRow = @mysqli_fetch_array($outroResultado, MYSQLI_ASSOC)){
+                        $nome = $outroRow['nome'];
+                    }
+
+                    $mudaData = new DateTime($row['dataCadastro']);
             ?>
             <legend class="float-none w-auto p-2">Pedido <?=$row['numero'];?></legend>
 
@@ -48,8 +59,8 @@
                                         <div class="col-sm-12">
                                             <fieldset class="border p-2">
                                                 <p class="title"><?=$row['tipo'];?></p>
-                                                <p class="comment1">Cadastrado por <?=$row['funcionario'];?> em
-                                                    <?=$row['tipo'];?></p>
+                                                <p class="comment1">Cadastrado por <?=$nome;?> em
+                                                    <?=$mudaData->format('d/m/Y');?></p>
                                             </fieldset>
                                         </div>
                                     </div>

@@ -8,10 +8,19 @@
     $tipo = $_POST['txtTipo'];
     $cpf = $_POST['txtCPF'];
     $nome = $_POST['txtNome'];
+    date_default_timezone_set('America/Sao_Paulo');
+    $hoje = date('Y-m-d');
+    $nomeFuncionario = $_SESSION['funcionario'];
+    $cadastra->setTable("tb_usuario");
+    $resultado = $cadastra->getIdUsuarioByNome($nomeFuncionario);
+    $id = 0;
 
+    while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
+        $id = $row['id'];
+    }
     $cadastra->setTable("tb_pedido");
-    $cadastra->setFields("numero,data,tipo,cpf,nome, etapa");
-    $cadastra->setDados("'$numero','$data','$tipo','$cpf','$nome', 'Análise'"); 
+    $cadastra->setFields("numero,data,tipo,cpf,nome,etapa,funcionario,dataCadastro");
+    $cadastra->setDados("'$numero','$data','$tipo','$cpf','$nome','Análise','$id','$hoje'"); 
     $cadastra->insert();
 
     
