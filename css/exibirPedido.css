@@ -8,6 +8,16 @@
     margin-bottom: 10px;
 }
 
+.space5 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-align{
+    margin: 0%;
+    text-align: center;
+}
+
 .line {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -23,6 +33,7 @@ legend{
     background-color: var(--bs-light);
     border-color: var(--bs-gray);
 }
+
 .nav-link-dark:hover {
     color: white;
     background-color: #313A46;

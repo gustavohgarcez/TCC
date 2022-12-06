@@ -16,17 +16,40 @@
     <form class="form-horizontal align" method="POST" action="../controller/cadastrarPedido.php">
         <fieldset class="border p-2">
             <?php
-				while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
-                    $busca->setTable("tb_usuario");
-                    $outroResultado = $busca->getNomeUsuarioById($row['funcionario']);
-                    $nome = "";
-                
-                    while($outroRow = @mysqli_fetch_array($outroResultado, MYSQLI_ASSOC)){
-                        $nome = $outroRow['nome'];
-                    }
+                    while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
+                        //organiza CPF/CNPJ//
+                        $doc = $row['cpf'];
+                        $qtd = strlen($doc);
 
-                    $mudaData = new DateTime($row['dataCadastro']);
-            ?>
+                        if($qtd === 14 ) {
+                            $titulo = 'CPF';
+                        } else {
+                            $titulo = 'CNPJ';
+                        }
+
+                        //retorna nome do usuário que cadastrou o pedido//
+                        $busca->setTable("tb_usuario");
+                        $outroResultado = $busca->getNomeUsuarioById($row['funcionario']);
+                        $nome = "";
+                    
+                        while($outroRow = @mysqli_fetch_array($outroResultado, MYSQLI_ASSOC)){
+                            $nome = $outroRow['nome'];
+                        }
+
+                        //retorna data de cadastro do pedido//
+                        $mudaData = new DateTime($row['dataCadastro']);
+
+                        //retorna etapa atual do pedido//
+                        $busca->setTable("tb_etapa");
+                        $resultadoEtapa = $busca->getNomeEtapaById($row['etapa']);
+                        $nomeEtapa = "";
+                    
+                        while($rowEtapa = @mysqli_fetch_array($resultadoEtapa, MYSQLI_ASSOC)){
+                            $nomeEtapa = $rowEtapa['nome'];
+                        }
+
+                        //retorna as etapas já realizadas//
+                ?>
             <legend class="float-none w-auto p-2">Pedido <?=$row['numero'];?></legend>
 
             <div class="row">
@@ -59,8 +82,10 @@
                                         <div class="col-sm-12">
                                             <fieldset class="border p-2">
                                                 <p class="title"><?=$row['tipo'];?></p>
+                                                <p class="comment1">Solicitado por <?=$row['nome'];?>,
+                                                    <?=$titulo;?> <?=$doc;?>.</p>
                                                 <p class="comment1">Cadastrado por <?=$nome;?> em
-                                                    <?=$mudaData->format('d/m/Y');?></p>
+                                                    <?=$mudaData->format('d/m/Y');?>.</p>
                                             </fieldset>
                                         </div>
                                     </div>
@@ -74,7 +99,7 @@
                                             <fieldset class="border p-2">
                                                 <p class="title">Etapa Atual:</p>
                                                 <div class="line"></div>
-                                                <p class="comment"><?=$row['etapa'];?></p>
+                                                <p class="comment"><?=$nomeEtapa;?></p>
                                             </fieldset>
                                         </div>
                                     </div>
@@ -89,7 +114,7 @@
                                             <fieldset class="border p-2">
                                                 <p class="title">Etapas Realizadas:</p>
                                                 <div class="line"></div>
-                                                <p class="comment"><?=$row['etapa'];?></p>
+                                                <p class="comment"><?=$nomeEtapa;?></p>
                                             </fieldset>
                                         </div>
                                     </div>
@@ -111,10 +136,25 @@
 
                 <!--Cartões Laterais-->
                 <div class="col-sm-3">
-                    <div class="col-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span>Executar Pedido</span>
+                    <!--Timer-->
+                    <div class="col-12 btn-align">
+                        <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
+                            <span id="counter">00:00:00</span><br>
                         </button>
+
+                        <div class="space5"></div>
+
+                        <div class="row">
+                            <div class="col">
+                                <input type="button" value="Parar" onclick="para();">
+                            </div>
+                            <div class="col">
+                                <input type="button" value="Iniciar" onclick="inicia();">
+                            </div>
+                            <div class="col">
+                                <input type="button" value="Zerar" onclick="zera();">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="line"></div>
@@ -154,31 +194,10 @@
                     </div>
                 </div>
             </div>
-
-            <!--<div class="panel panel-primary">
-                <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nº</th>
-                                <th scope="col">Data</th>
-                                <th scope="col">Tipo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><?=$row['numero'];?></td>
-                                <td><?=$row['data'];?></td>
-                                <td><?=$row['tipo'];?></td>
-                            </tr>
-                            <?php } ?>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
+            <?php } ?>
         </fieldset>
     </form>
+    <script src="../js/timer.js"></script>
 </body>
 
 </html>
