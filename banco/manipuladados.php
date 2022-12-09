@@ -71,6 +71,7 @@ class manipulaDados extends conexao{
         $this->qr = self::execSQL($this->sql);
         return $this->qr;
     }
+
     public function exibirCadastrado($pesquisar){
         $this->sql = "SELECT *  FROM tb_pedido WHERE numero = $pesquisar";
         //echo '<script>alert("'.$this->sql.'");</script>';
@@ -108,7 +109,13 @@ class manipulaDados extends conexao{
         $this->qr = self::execSQL($this->sql);
         return $this->qr;
     }
-    //
+
+    //exibir etapas realizadas
+    public function exibirEtapasRealizadas($id){
+        $this->sql = "SELECT *  FROM tb_etapas_realizadas WHERE id_pedido = $id";
+        $this->qr = self::execSQL($this->sql);
+        return $this->qr;
+    }
 
     //formatar cpf e cnpj//
     function formatar_cpf_cnpj($doc) {

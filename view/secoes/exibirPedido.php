@@ -13,7 +13,7 @@
 <link href="../css/exibirPedido.css" rel="stylesheet">
 
 <body>
-    <form class="form-horizontal align" method="POST" action="../controller/cadastrarPedido.php">
+    <form class="form-horizontal align" method="POST" action="../controller/etapasRealizadas.php">
         <fieldset class="border p-2">
             <?php
                     while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
@@ -48,8 +48,96 @@
                             $nomeEtapa = $rowEtapa['nome'];
                         }
 
-                        //retorna as etapas já realizadas//
-                ?>
+                        $_SESSION['atual']=$nomeEtapa;
+
+
+                        //mostra próximas etapas//
+                        switch($nomeEtapa){
+                            case 'Análise':
+                                $prox1 = 'Conferência de Análise';
+                                $prox2 = 'Minuta';
+                                $prox3 = 'Conferência de Minuta';
+                                break;
+                            case 'Conferência de Análise':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Análise';
+                                break;
+                            case 'Minuta':
+                                $prox1 = 'Conferência de Minuta';
+                                $prox2 = 'Registro';
+                                $prox3 = 'Voltar para Conferência de Análise';
+                                break;
+                            case 'Conferência de Minuta':
+                                $prox1 = 'Registro';
+                                $prox2 = 'Minuta';
+                                $prox3 = 'Voltar para Minuta';
+                                break;
+                            case 'Registro':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Conferência de Minuta';
+                                break;
+                            case 'Conferência de Registro':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Análise';
+                                break;
+                            case 'Digitalização':
+                                $prox1 = 'Conferência de Análise';
+                                $prox2 = 'Minuta';
+                                $prox3 = 'Conferência de Minuta';
+                                break;
+                            case 'Conferência de Digitalização':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Análise';
+                                break;
+                            case 'Finalizar':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Análise';
+                                break;
+                           default:
+                                exit("alguém tentou tapear o script, que tente em outro site!");
+                                break;
+                        }                
+                        
+                        //retorna etapas realizadas
+                        $busca->setTable("tb_etapas_realizadas");
+                        $EtapasRel1 = $busca->exibirEtapasRealizadas($row['numero']);
+                        while($rowEtapaReal = @mysqli_fetch_array($EtapasRel1, MYSQLI_ASSOC)){
+                            $listaEtapas = $rowEtapaReal['data'];
+                        
+                            //retorna o nome da etapa realizada//
+                            $busca->setTable("tb_etapa");
+                            $EtapasRel2 = $busca->getNomeEtapaById($rowEtapaReal['id_etapa']);
+                            $nomeEtapaRealizadas = "";
+                    
+                            while($rowEtapaReal2 = @mysqli_fetch_array($EtapasRel2, MYSQLI_ASSOC)){
+                                $nomeEtapaRealizadas = $rowEtapaReal2['nome'];
+                                $etapa = array($rowEtapaReal2['nome']);
+
+                            }
+
+                            //retorna o nome do usuário que realizou a etapa//
+                            $busca->setTable("tb_usuario");
+                            $userEtapasRel = $busca->getNomeEtapaById($rowEtapaReal['id_usuario']);
+                            $nomeUserEtapaRealizadas = "";
+                    
+                            while($rowUserEtapaReal2 = @mysqli_fetch_array($userEtapasRel, MYSQLI_ASSOC)){
+                                $nomeUserEtapaRealizadas = $rowUserEtapaReal2['nome'];
+
+                                $user = array($rowUserEtapaReal2['nome']);
+                                
+                            }
+                            foreach ($user as $user) {                            
+                                foreach ($etapa as $etapa) {
+                                    //echo "$etapa realizada por $user em $listaEtapas.<br>";
+                                }
+                            }
+                        }
+                        ?>
             <legend class="float-none w-auto p-2">Pedido <?=$row['numero'];?></legend>
 
             <div class="row">
@@ -65,9 +153,6 @@
                                 <button class="nav-link nav-link-dark" id="nav-profile-tab" data-bs-toggle="tab"
                                     data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
                                     aria-selected="false">Etapas Realizadas</button>
-                                <button class="nav-link nav-link-dark" id="nav-contact-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
-                                    aria-selected="false">Linha do Tempo</button>
                                 <button class="nav-link nav-link-dark" id="nav-disabled-tab" data-bs-toggle="tab"
                                     data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled"
                                     aria-selected="false" disabled>Cancelar Pedido</button>
@@ -113,18 +198,51 @@
                                         <div class="col-sm-12">
                                             <fieldset class="border p-2">
                                                 <p class="title">Etapas Realizadas:</p>
-                                                <div class="line"></div>
-                                                <p class="comment"><?=$nomeEtapa;?></p>
+                                                <?php
+                                                    //retorna etapas realizadas
+                                                    $busca->setTable("tb_etapas_realizadas");
+                                                    $EtapasRel1 = $busca->exibirEtapasRealizadas($row['numero']);
+                                                    while($rowEtapaReal = @mysqli_fetch_array($EtapasRel1, MYSQLI_ASSOC)){
+                                                        $teste = new DateTime($rowEtapaReal['data']);
+
+                                                    
+                                                        //retorna o nome da etapa realizada//
+                                                        $busca->setTable("tb_etapa");
+                                                        $EtapasRel2 = $busca->getNomeEtapaById($rowEtapaReal['id_etapa']);
+                                                        $nomeEtapaRealizadas = "";
+                                                
+                                                        while($rowEtapaReal2 = @mysqli_fetch_array($EtapasRel2, MYSQLI_ASSOC)){
+                                                            $nomeEtapaRealizadas = $rowEtapaReal2['nome'];
+                                                            $etapa = array($rowEtapaReal2['nome']);
+
+                                                        }
+
+                                                        //retorna o nome do usuário que realizou a etapa//
+                                                        $busca->setTable("tb_usuario");
+                                                        $userEtapasRel = $busca->getNomeEtapaById($rowEtapaReal['id_usuario']);
+                                                        $nomeUserEtapaRealizadas = "";
+                                                
+                                                        while($rowUserEtapaReal2 = @mysqli_fetch_array($userEtapasRel, MYSQLI_ASSOC)){
+                                                            $nomeUserEtapaRealizadas = $rowUserEtapaReal2['nome'];
+
+                                                            $user = array($rowUserEtapaReal2['nome']);
+                                                            
+                                                        }
+                                                        foreach ($user as $user) {                            
+                                                            foreach ($etapa as $etapa) {
+                                                ?>
+                                                            <div class="line"></div>
+                                                            <p class="comment"><b><?=$etapa;?></b><br></p>
+                                                            <p class="comment1">Realizada por <?=$user;?> em <?=$teste->format('d/m/Y');?>.</p>
+                                                <?php
+                                                            }
+                                                        }
+                                                    }
+                                                ?>                                                
                                             </fieldset>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!--Linha do Tempo-->
-                            <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-                                aria-labelledby="nav-contact-tab" tabindex="0">With supporting text below as a natural
-                                lead-in to additional
-                                content....
                             </div>
                             <!--Cancelar Pedido-->
                             <div class="tab-pane fade" id="nav-disabled" role="tabpanel"
@@ -146,13 +264,10 @@
 
                         <div class="row">
                             <div class="col">
-                                <input type="button" value="Parar" onclick="para();">
+                                <input class="col-12" type="button" value="Iniciar" onclick="inicia();">
                             </div>
                             <div class="col">
-                                <input type="button" value="Iniciar" onclick="inicia();">
-                            </div>
-                            <div class="col">
-                                <input type="button" value="Zerar" onclick="zera();">
+                                <input class="col-12" type="button" value="Parar" onclick="para(); zera();">
                             </div>
                         </div>
                     </div>
@@ -162,24 +277,24 @@
                     <div class="space10"></div>
 
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span>Conferência de Análise</span>
+                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
+                            <span><?=$prox1;?></span>
                         </button>
                     </div>
 
                     <div class="space10"></div>
 
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span>Minuta</span>
+                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
+                            <span><?=$prox2;?></span>
                         </button>
                     </div>
 
                     <div class="space10"></div>
 
                     <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span>Conferência de Minuta</span>
+                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
+                            <span><?=$prox3;?></span>
                         </button>
                     </div>
 
@@ -187,11 +302,11 @@
                     <div class="line"></div>
                     <div class="space10"></div>
 
-                    <div class="col-sm-12">
+                    <!--<div class="col-sm-12">
                         <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
                             <span>Voltar Etapa</span>
                         </button>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <?php } ?>

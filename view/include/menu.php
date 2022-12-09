@@ -61,7 +61,7 @@
                                 Home
                             </a>
                         </li>
-                        <li>
+                    <!--<li>
                             <a href="?secao=task">
                                 <i class="fas fa-image"></i>
                                 Tarefas
@@ -80,7 +80,7 @@
                             </a>
                         </li>
                     </ul>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled">-->
                         <ul class="list-unstyled CTAs">
                             <li>
                                 <a href="logout.php" >Sair</a>

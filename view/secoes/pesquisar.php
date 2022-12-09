@@ -23,7 +23,7 @@
 <link href="../css/pedido.css" rel="stylesheet">
 
 <body>
-    <form class="form-horizontal align" method="POST" action="../controller/cadastrarPedido.php">
+    <form class="form-horizontal align" method="POST" action="?secao=exibirPedidoPesquisa">
         <fieldset class="border p-2">
             <legend class="float-none w-auto p-2">Pesquisar</legend>
             <div class="panel panel-primary">
