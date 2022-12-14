@@ -49,59 +49,7 @@
                         }
 
                         $_SESSION['atual']=$nomeEtapa;
-
-
-                        //mostra próximas etapas//
-                        switch($nomeEtapa){
-                            case 'Análise':
-                                $prox1 = 'Conferência de Análise';
-                                $prox2 = 'Minuta';
-                                $prox3 = 'Conferência de Minuta';
-                                break;
-                            case 'Conferência de Análise':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
-                                break;
-                            case 'Minuta':
-                                $prox1 = 'Conferência de Minuta';
-                                $prox2 = 'Registro';
-                                $prox3 = 'Voltar para Conferência de Análise';
-                                break;
-                            case 'Conferência de Minuta':
-                                $prox1 = 'Registro';
-                                $prox2 = 'Minuta';
-                                $prox3 = 'Voltar para Minuta';
-                                break;
-                            case 'Registro':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Conferência de Minuta';
-                                break;
-                            case 'Conferência de Registro':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
-                                break;
-                            case 'Digitalização':
-                                $prox1 = 'Conferência de Análise';
-                                $prox2 = 'Minuta';
-                                $prox3 = 'Conferência de Minuta';
-                                break;
-                            case 'Conferência de Digitalização':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
-                                break;
-                            case 'Finalizar':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
-                                break;
-                           default:
-                                exit("alguém tentou tapear o script, que tente em outro site!");
-                                break;
-                        }                
+         
                         
                         //retorna etapas realizadas
                         $busca->setTable("tb_etapas_realizadas");
@@ -130,11 +78,6 @@
 
                                 $user = array($rowUserEtapaReal2['nome']);
                                 
-                            }
-                            foreach ($user as $user) {                            
-                                foreach ($etapa as $etapa) {
-                                    //echo "$etapa realizada por $user em $listaEtapas.<br>";
-                                }
                             }
                         }
                         ?>
@@ -276,8 +219,62 @@
                     <p class="comment1">Avançar Etapa:</p>
                     <div class="space10"></div>
 
+                    <?php 
+                    //mostra próximas etapas//
+                        switch($nomeEtapa){
+                            case 'Análise':
+                                $prox1 = 'Conferência de Análise';
+                                $prox2 = 'Minuta';
+                                $prox3 = 'Conferência de Minuta';
+                                break;
+                            case 'Conferência de Análise':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Minuta':
+                                $prox1 = 'Conferência de Minuta';
+                                $prox2 = 'Análise';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Conferência de Minuta':
+                                $prox1 = 'Registro';
+                                $prox2 = 'Conferência de Análise';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Registro':
+                                $prox1 = 'Conferência de Registro';
+                                $prox2 = 'Digitalização';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Conferência de Registro':
+                                $prox1 = 'Digitalização';
+                                $prox2 = 'Conferência de Digitalização';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Digitalização':
+                                $prox1 = 'Conferência de Digitalização';
+                                $prox2 = 'Conferência de Registro';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Conferência de Digitalização':
+                                $prox1 = 'Finalizar';
+                                $prox2 = 'Conferência de Registro';
+                                $prox3 = "$etapa";
+                                break;
+                            case 'Finalizar':
+                                $prox1 = 'Minuta';
+                                $prox2 = 'Conferência de Minuta';
+                                $prox3 = 'Voltar para Análise';
+                                break;
+                           default:
+                                exit("alguém tentou tapear o script, que tente em outro site!");
+                                break;
+                        }
+                        ?>
+
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
+                        <button type="submit" name="botao" value="<?=$prox1;?>" class="btn btn-outline-dark me-3 col-12">
                             <span><?=$prox1;?></span>
                         </button>
                     </div>
@@ -285,7 +282,7 @@
                     <div class="space10"></div>
 
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
+                        <button type="submit" name="botao" value="<?=$prox2;?>" class="btn btn-outline-dark me-3 col-12">
                             <span><?=$prox2;?></span>
                         </button>
                     </div>
@@ -293,8 +290,8 @@
                     <div class="space10"></div>
 
                     <div class="col-sm-12">
-                        <button type="submit" class="btn btn-outline-dark me-3 col-12">
-                            <span><?=$prox3;?></span>
+                        <button type="submit" name="botao" value="<?=$prox3;?>" class="btn btn-outline-dark me-3 col-12">
+                            <span>Voltar Etapa</span>
                         </button>
                     </div>
 

@@ -39,6 +39,78 @@
     $cadastra->setDados("'$idPedido','$idEtapa','$idUsuario','$hoje'"); 
     $cadastra->insert();
 
+    $op =  $_POST['botao'];
+
+    $cadastra->setTable("tb_etapa");
+    $resultadoEtapa = $cadastra->getIdEtapaByNome($op);
+    $idEtapa = 0;
+    while($row = @mysqli_fetch_array($resultadoEtapa, MYSQLI_ASSOC)){
+        $idEtapa = $row['id'];
+    }
+
+    $altera = new manipuladados();
+    $altera->setTable("tb_pedido");
+
+    switch($op){
+        case 'Análise':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Conferência de Análise':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Minuta':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Conferência de Minuta':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Registro':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Conferência de Registro':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Digitalização':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Conferência de Digitalização':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+        case 'Finalizar':
+            $altera->setFields("etapa='$idEtapa'"); 
+            $altera->setFieldId("numero");
+            $altera->setValueId($pedido);
+            $altera->update();
+            break;
+       default:
+            exit("alguém tentou tapear o script, que tente em outro site!");
+            break;
+    }
+
     //atualiza a etapa atual//
     //$cadastra->setTable("tb_pedido");
     //$cadastra->setFields("id_etapa");

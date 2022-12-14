@@ -10,9 +10,15 @@ legend{
 
 #content{
     padding-top: 8px;
+    min-height: 75vh;
 }
 
 .btn-align{
     margin: 0%;
     text-align: center;
+}
+
+.img-background{
+    background-image: url(../assets/CF.png);
+    background-size: cover;
 }

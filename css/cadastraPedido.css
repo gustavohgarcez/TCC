@@ -14,3 +14,8 @@ legend{
 .align{
     margin-top: 10px;
 }
+
+#content{
+    padding-top: 8px;
+    min-height: 71vh;
+}
