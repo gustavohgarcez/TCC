@@ -22,6 +22,10 @@
 <!--CSS-->
 <link href="../css/pedido.css" rel="stylesheet">
 
+<head>
+    <title>Pesquisar Pedido</title>
+</head>
+
 <body>
     <form class="form-horizontal align" method="POST" action="?secao=exibirPedidoPesquisa">
         <fieldset class="border p-2">
@@ -46,7 +50,7 @@
                                 <td><?=$row['numero'];?></td>
                                 <td><?=$row['data'];?></td>
                                 <td><?=$row['tipo'];?></td>
-                                <td><input type="submit" value="Abrir"/><input type="hidden" name="pegar" value="<?=$row['numero'];?>"/>
+                                <td><input type="submit" value="Abrir"/><input type="hidden" name="pegar" value="<?=$row['numero'];?>"/></td>
                             </tr>
                             </form>
                             <?php } ?>

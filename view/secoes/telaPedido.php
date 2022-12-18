@@ -6,6 +6,10 @@
 <!--CSS-->
 <link href="../css/cadastraPedido.css" rel="stylesheet">
 
+<head>
+    <title>Cadastrar Pedido</title>
+</head>
+
 <body>
     <form class="form-horizontal align" method="POST" action="../controller/cadastrarPedido.php">
         <div id="content">

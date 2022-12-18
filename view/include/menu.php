@@ -21,71 +21,24 @@
                 </div>
 
                 <ul class="list-unstyled components">
-                    <!--<li class="active">
-                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <i class="fas fa-home"></i>
-                                Home
-                            </a>
-                            <ul class="collapse list-unstyled" id="homeSubmenu">
-                                <li>
-                                    <a href="?secao=home">Home 1</a>
-                                </li>
-                                <li>
-                                    <a href="?secao=help">Home 2</a>
-                                </li>
-                                <li>
-                                    <a href="#">Home 3</a>
-                                </li>
-                            </ul>
-                        </li>-->
-                    <!--<li>
-                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-                                <i class="fas fa-copy"></i>
-                                Pages
-                            </a>
-                            <ul class="collapse list-unstyled" id="pageSubmenu">
-                                <li>
-                                    <a href="#">Page 1</a>
-                                </li>
-                                <li>
-                                    <a href="#">Page 2</a>
-                                </li>
-                                <li>
-                                    <a href="#">Page 3</a>
-                                </li>
-                            </ul>
-                        </li>-->
                     <li>
                         <a href="?secao=home">
-                            <i class="fas fa-briefcase"></i>
-                            Home
+                            <img src="../assets/icon_home_branco.png" alt="" width="30" height="30">
+                            <span class="list-unstyled CTAs">Home</span>
                         </a>
                     </li>
                     <li>
                         <a href="?secao=telaPedido">
-                            <i class="fas fa-image"></i>
-                            Cadastrar Pedidos
+                            <img src="../assets/icon_cadastra_branco.png" alt="" width="30" height="30">
+                            <span class="list-unstyled CTAs">Cadastrar Pedidos</span>
                         </a>
                     </li>
-                    <!--<li>
-                            <a href="?secao=chat">
-                                <i class="fas fa-question"></i>
-                                Chat
-                            </a>
-                        </li>
-                        <li>
-                            <a href="?secao=help">
-                                <i class="fas fa-paper-plane"></i>
-                                Ajuda
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="list-unstyled">-->
-                    <ul class="list-unstyled CTAs">
-                        <li>
-                            <a href="logout.php">Sair</a>
-                        </li>
-                    </ul>
+                    <li>
+                        <a href="logout.php">
+                            <img src="../assets/icon_sair_branco.png" alt="" width="27" height="27">
+                            <span class="list-unstyled CTAs">Sair</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>

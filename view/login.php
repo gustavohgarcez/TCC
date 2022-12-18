@@ -1,6 +1,3 @@
-<?php
-?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -24,7 +21,7 @@
         -->
 
         <form class="form-signin" method="POST" action="validarlogin.php">
-            <img class="mb-4" type="logo" src="../assets/doc.png" alt="" width="85" height="85">
+            <img class="mb-4" type="logo" src="../assets/CF - login.png" alt="" width="200" height="auto">
             <h1 class="h3 mb-3 font-weight-normal">Faça login</h1>
 
             <label for="tNome" class="sr-only">Nome de Usuário</label>
