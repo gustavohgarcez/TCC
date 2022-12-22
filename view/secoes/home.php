@@ -7,7 +7,7 @@
 <link href="../css/home.css" rel="stylesheet">
 
 <head>
-    <title>Tela Inicial</title>
+    <title>Home</title>
 </head>
 
 <body>

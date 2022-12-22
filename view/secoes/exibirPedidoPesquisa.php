@@ -1,20 +1,27 @@
 <?php
     
     $id = $_POST['pegar'];
-     echo "<h1>".$id."</h1>";      
+    
     include_once ("../banco/manipuladados.php");
 	$busca = new manipuladados(); 
     $resultado = $busca->exibirCadastrado($id);
+
+    $nomeFuncionario = $_SESSION['funcionario'];
+    while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
 ?>
 <html>
 <!--CSS-->
-<link href="../css/pedido.css" rel="stylesheet">
+<link href="../css/exibirPedido.css" rel="stylesheet">
+
+<head>
+    <title>Pedido <?=$row['numero'];?></title>
+</head>
 
 <body>
-    <form class="form-horizontal align" method="POST" action="../controller/cadastrarPedido.php">
-        <fieldset class="border p-2">
-            <?php
-                    while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
+    <form class="form-horizontal align" method="POST" action="../controller/etapasRealizadas.php">
+        <div id="content">
+            <fieldset class="border p-2">
+                <?php
                         //organiza CPF/CNPJ//
                         $doc = $row['cpf'];
                         $qtd = strlen($doc);
@@ -37,6 +44,9 @@
                         //retorna data de cadastro do pedido//
                         $mudaData = new DateTime($row['dataCadastro']);
 
+                        //retorna data de cadastro do pedido//
+                        $dataProt = new DateTime($row['data']);
+
                         //retorna etapa atual do pedido//
                         $busca->setTable("tb_etapa");
                         $resultadoEtapa = $busca->getNomeEtapaById($row['etapa']);
@@ -46,7 +56,209 @@
                             $nomeEtapa = $rowEtapa['nome'];
                         }
 
-                        //mostra próximas etapas//
+                        $_SESSION['atual']=$nomeEtapa;
+         
+                        
+                        //retorna etapas realizadas
+                        $busca->setTable("tb_etapas_realizadas");
+                        $EtapasRel1 = $busca->exibirEtapasRealizadas($row['numero']);
+                        while($rowEtapaReal = @mysqli_fetch_array($EtapasRel1, MYSQLI_ASSOC)){
+                            $listaEtapas = $rowEtapaReal['data'];
+                        
+                            //retorna o nome da etapa realizada//
+                            $busca->setTable("tb_etapa");
+                            $EtapasRel2 = $busca->getNomeEtapaById($rowEtapaReal['id_etapa']);
+                            $nomeEtapaRealizadas = "";
+                    
+                            while($rowEtapaReal2 = @mysqli_fetch_array($EtapasRel2, MYSQLI_ASSOC)){
+                                $nomeEtapaRealizadas = $rowEtapaReal2['nome'];
+                                $etapa = array($rowEtapaReal2['nome']);
+
+                            }
+
+                            //retorna o nome do usuário que realizou a etapa//
+                            $busca->setTable("tb_usuario");
+                            $userEtapasRel = $busca->getNomeEtapaById($rowEtapaReal['id_usuario']);
+                            $nomeUserEtapaRealizadas = "";
+                    
+                            while($rowUserEtapaReal2 = @mysqli_fetch_array($userEtapasRel, MYSQLI_ASSOC)){
+                                $nomeUserEtapaRealizadas = $rowUserEtapaReal2['nome'];
+
+                                $user = array($rowUserEtapaReal2['nome']);
+                                
+                            }
+                        }
+                        ?>
+                <legend class="float-none w-auto p-2">Pedido <?=$row['numero'];?></legend>
+
+                <div class="row">
+
+                    <!--Pasta-->
+                    <div class="col-sm-9">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
+                                    <button class="col-sm-6 nav-link nav-link-dark active" id="nav-home-tab"
+                                        data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab"
+                                        aria-controls="nav-home" aria-selected="true">Detalhes</button>
+                                    <button class="col-sm-6 nav-link nav-link-dark" id="nav-profile-tab"
+                                        data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab"
+                                        aria-controls="nav-profile" aria-selected="false">Processo</button>
+                                    <!--<button class="nav-link nav-link-dark" id="nav-disabled-tab" data-bs-toggle="tab"
+                                    data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled"
+                                    aria-selected="false" disabled>Cancelar Pedido</button>-->
+                                </div>
+                            </div>
+                            <div class="card-body tab-content" id="nav-tabContent">
+                                <!--Detalhes-->
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                    aria-labelledby="nav-home-tab" tabindex="0">
+                                    <div class="col-sm-12 b-card">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <fieldset class="border p-2">
+                                                    <p class="title"><?=$row['tipo'];?></p>
+                                                    <p class="comment1">
+                                                        Protocolado em <?=$dataProt->format('d/m/Y');?>.
+                                                    </p>
+                                                    <p class="comment1">
+                                                        Solicitado por <?=$row['nome'];?>, <?=$titulo;?> <?=$doc;?>.
+                                                    </p>
+                                                    <div class="line"></div>
+                                                    <p class="comment1">Pedido cadastrado por <?=$nome;?> em
+                                                        <?=$mudaData->format('d/m/Y');?>.
+                                                    </p>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="space15"></div>
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <fieldset class="border p-2">
+                                                    <p class="title">Etapa Atual:</p>
+                                                    <div class="line"></div>
+                                                    <p class="comment"><?=$nomeEtapa;?></p>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Processo-->
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                    aria-labelledby="nav-profile-tab" tabindex="0">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <fieldset class="border p-2">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Ação</th>
+                                                                <th scope="col">Responsável</th>
+                                                                <th scope="col">Data</th>
+                                                                <th scope="col">Tempo</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Pedido Cadastrado</td>
+                                                                <td><?=$nome;?></td>
+                                                                <td><?=$mudaData->format('d/m/Y');?></td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <?php
+                                                        //retorna etapas realizadas
+                                                        $busca->setTable("tb_etapas_realizadas");
+                                                        $EtapasRel1 = $busca->exibirEtapasRealizadas($row['numero']);
+                                                        while($rowEtapaReal = @mysqli_fetch_array($EtapasRel1, MYSQLI_ASSOC)){
+                                                            $teste = new DateTime($rowEtapaReal['data']);
+
+                                                        
+                                                            //retorna o nome da etapa realizada//
+                                                            $busca->setTable("tb_etapa");
+                                                            $EtapasRel2 = $busca->getNomeEtapaById($rowEtapaReal['id_etapa']);
+                                                            $nomeEtapaRealizadas = "";
+                                                    
+                                                            while($rowEtapaReal2 = @mysqli_fetch_array($EtapasRel2, MYSQLI_ASSOC)){
+                                                                $nomeEtapaRealizadas = $rowEtapaReal2['nome'];
+                                                                $etapa = array($rowEtapaReal2['nome']);
+
+                                                            }
+
+                                                            //retorna o nome do usuário que realizou a etapa//
+                                                            $busca->setTable("tb_usuario");
+                                                            $userEtapasRel = $busca->getNomeEtapaById($rowEtapaReal['id_usuario']);
+                                                            $nomeUserEtapaRealizadas = "";
+                                                    
+                                                            while($rowUserEtapaReal2 = @mysqli_fetch_array($userEtapasRel, MYSQLI_ASSOC)){
+                                                                $nomeUserEtapaRealizadas = $rowUserEtapaReal2['nome'];
+
+                                                                $user = array($rowUserEtapaReal2['nome']);
+                                                                
+                                                            }
+                                                            foreach ($user as $user) {                            
+                                                                foreach ($etapa as $etapa) {
+                                                    ?>
+
+
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><?=$etapa;?></td>
+                                                                <td><?=$user;?></td>
+                                                                <td><?=$teste->format('d/m/Y');?></td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <?php
+                                                            }
+                                                        }
+                                                    }
+                                                ?>
+                                                    </table>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Cancelar Pedido-->
+                                <!--<div class="tab-pane fade" id="nav-disabled" role="tabpanel"
+                                aria-labelledby="nav-disabled-tab" tabindex="0">...
+                            </div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Cartões Laterais-->
+                    <div class="col-sm-3">
+                        <!--Timer-->
+                        <div class="col-12 btn-align">
+                            <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
+                                <span id="counter">00:00:00</span><br>
+                            </button>
+
+                            <div class="space5"></div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <input class="col-12" type="button" value="Iniciar" onclick="inicia();">
+                                </div>
+                                <div class="col">
+                                    <input class="col-12" type="button" value="Parar" onclick="para(); zera();">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="line"></div>
+
+                        <p class="comment1">Avançar Etapa:</p>
+                        <div class="space10"></div>
+
+                        <?php 
+                    //mostra próximas etapas//
                         switch($nomeEtapa){
                             case 'Análise':
                                 $prox1 = 'Conferência de Análise';
@@ -56,37 +268,37 @@
                             case 'Conferência de Análise':
                                 $prox1 = 'Minuta';
                                 $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Minuta':
                                 $prox1 = 'Conferência de Minuta';
-                                $prox2 = 'Registro';
-                                $prox3 = 'Voltar para Conferência de Análise';
+                                $prox2 = 'Análise';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Conferência de Minuta':
                                 $prox1 = 'Registro';
-                                $prox2 = 'Minuta';
-                                $prox3 = 'Voltar para Minuta';
+                                $prox2 = 'Conferência de Análise';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Registro':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Conferência de Minuta';
+                                $prox1 = 'Conferência de Registro';
+                                $prox2 = 'Digitalização';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Conferência de Registro':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
+                                $prox1 = 'Digitalização';
+                                $prox2 = 'Conferência de Digitalização';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Digitalização':
-                                $prox1 = 'Conferência de Análise';
-                                $prox2 = 'Minuta';
-                                $prox3 = 'Conferência de Minuta';
+                                $prox1 = 'Conferência de Digitalização';
+                                $prox2 = 'Conferência de Registro';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Conferência de Digitalização':
-                                $prox1 = 'Minuta';
-                                $prox2 = 'Conferência de Minuta';
-                                $prox3 = 'Voltar para Análise';
+                                $prox1 = 'Finalizar';
+                                $prox2 = 'Conferência de Registro';
+                                $prox3 = "$etapa";
                                 break;
                             case 'Finalizar':
                                 $prox1 = 'Minuta';
@@ -96,153 +308,48 @@
                            default:
                                 exit("alguém tentou tapear o script, que tente em outro site!");
                                 break;
-                        }                ?>
-            <legend class="float-none w-auto p-2">Pedido <?=$row['numero'];?></legend>
+                        }
+                        ?>
 
-            <div class="row">
-
-                <!--Pasta-->
-                <div class="col-sm-9">
-                    <div class="card text-center">
-                        <div class="card-header">
-                            <div class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
-                                <button class="nav-link nav-link-dark active" id="nav-home-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                    aria-selected="true">Detalhes</button>
-                                <button class="nav-link nav-link-dark" id="nav-profile-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
-                                    aria-selected="false">Etapas Realizadas</button>
-                                <button class="nav-link nav-link-dark" id="nav-contact-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact"
-                                    aria-selected="false">Linha do Tempo</button>
-                                <button class="nav-link nav-link-dark" id="nav-disabled-tab" data-bs-toggle="tab"
-                                    data-bs-target="#nav-disabled" type="button" role="tab" aria-controls="nav-disabled"
-                                    aria-selected="false" disabled>Cancelar Pedido</button>
-                            </div>
+                        <div class="col-sm-12">
+                            <button type="submit" name="botao" value="<?=$prox1;?>"
+                                class="btn btn-outline-dark me-3 col-12">
+                                <span><?=$prox1;?></span>
+                            </button>
                         </div>
-                        <div class="card-body tab-content" id="nav-tabContent">
-                            <!--Detalhes-->
-                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-                                aria-labelledby="nav-home-tab" tabindex="0">
-                                <div class="col-sm-12 b-card">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <fieldset class="border p-2">
-                                                <p class="title"><?=$row['tipo'];?></p>
-                                                <p class="comment1">Solicitado por <?=$row['nome'];?>,
-                                                    <?=$titulo;?> <?=$doc;?>.</p>
-                                                <p class="comment1">Cadastrado por <?=$nome;?> em
-                                                    <?=$mudaData->format('d/m/Y');?>.</p>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="space15"></div>
+                        <div class="space10"></div>
 
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <fieldset class="border p-2">
-                                                <p class="title">Etapa Atual:</p>
-                                                <div class="line"></div>
-                                                <p class="comment"><?=$nomeEtapa;?></p>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Etapas Realizadas-->
-                            <div class="tab-pane fade" id="nav-profile" role="tabpanel"
-                                aria-labelledby="nav-profile-tab" tabindex="0">
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <fieldset class="border p-2">
-                                                <p class="title">Etapas Realizadas:</p>
-                                                <div class="line"></div>
-                                                <p class="comment"><?=$nomeEtapa;?></p>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Linha do Tempo-->
-                            <div class="tab-pane fade" id="nav-contact" role="tabpanel"
-                                aria-labelledby="nav-contact-tab" tabindex="0">With supporting text below as a natural
-                                lead-in to additional
-                                content....
-                            </div>
-                            <!--Cancelar Pedido-->
-                            <div class="tab-pane fade" id="nav-disabled" role="tabpanel"
-                                aria-labelledby="nav-disabled-tab" tabindex="0">...
-                            </div>
+                        <div class="col-sm-12">
+                            <button type="submit" name="botao" value="<?=$prox2;?>"
+                                class="btn btn-outline-dark me-3 col-12">
+                                <span><?=$prox2;?></span>
+                            </button>
                         </div>
-                    </div>
-                </div>
 
-                <!--Cartões Laterais-->
-                <div class="col-sm-3">
-                    <!--Timer-->
-                    <div class="col-12 btn-align">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
-                            <span id="counter">00:00:00</span><br>
-                        </button>
+                        <div class="space10"></div>
 
-                        <div class="space5"></div>
-
-                        <div class="row">
-                            <div class="col">
-                                <input type="button" value="Parar" onclick="para();">
-                            </div>
-                            <div class="col">
-                                <input type="button" value="Iniciar" onclick="inicia();">
-                            </div>
-                            <div class="col">
-                                <input type="button" value="Zerar" onclick="zera();">
-                            </div>
+                        <div class="col-sm-12">
+                            <button type="submit" name="botao" value="<?=$prox3;?>"
+                                class="btn btn-outline-dark me-3 col-12">
+                                <span>Voltar Etapa</span>
+                            </button>
                         </div>
-                    </div>
 
-                    <div class="line"></div>
-                    <p class="comment1">Avançar Etapa:</p>
-                    <div class="space10"></div>
+                        <div class="space10"></div>
+                        <div class="line"></div>
+                        <div class="space10"></div>
 
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span><?=$prox1;?></span>
-                        </button>
-                    </div>
-
-                    <div class="space10"></div>
-
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span><?=$prox2;?></span>
-                        </button>
-                    </div>
-
-                    <div class="space10"></div>
-
-                    <div class="col-sm-12">
-                        <button type="button" class="btn btn-outline-dark me-3 col-12">
-                            <span><?=$prox3;?></span>
-                        </button>
-                    </div>
-
-                    <div class="space10"></div>
-                    <div class="line"></div>
-                    <div class="space10"></div>
-
-                    <!--<div class="col-sm-12">
+                        <!--<div class="col-sm-12">
                         <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
                             <span>Voltar Etapa</span>
                         </button>
                     </div>-->
+                    </div>
                 </div>
-            </div>
-            <?php } ?>
-        </fieldset>
+                <?php } ?>
+            </fieldset>
+        </div>
     </form>
     <script src="../js/timer.js"></script>
 </body>

@@ -20,7 +20,7 @@
 
 <html>
 <!--CSS-->
-<link href="../css/pedido.css" rel="stylesheet">
+<link href="../css/pesquisar.css" rel="stylesheet">
 
 <head>
     <title>Pesquisar Pedido</title>
@@ -30,7 +30,7 @@
     <form class="form-horizontal align" method="POST" action="?secao=exibirPedidoPesquisa">
         <fieldset class="border p-2">
             <legend class="float-none w-auto p-2">Pesquisar</legend>
-            <div class="panel panel-primary">
+            <div id="content" class="panel panel-primary">
                 <div class="panel-body">
                     <table class="table table-hover">
                         <thead>
@@ -43,15 +43,18 @@
                         <tbody>
                             <?php
 				                while($row = @mysqli_fetch_array($resultado, MYSQLI_ASSOC)){
+                                    //retorna data de cadastro do pedido//
+                                    $data = new DateTime($row['data']);
                             ?>
                             <form method="post" action="?secao=exibirPedidoPesquisa">
-                            
-                            <tr>
-                                <td><?=$row['numero'];?></td>
-                                <td><?=$row['data'];?></td>
-                                <td><?=$row['tipo'];?></td>
-                                <td><input type="submit" value="Abrir"/><input type="hidden" name="pegar" value="<?=$row['numero'];?>"/></td>
-                            </tr>
+
+                                <tr>
+                                    <td><?=$row['numero'];?></td>
+                                    <td><?=$data->format('d/m/Y');?></td>
+                                    <td><?=$row['tipo'];?></td>
+                                    <td><input type="submit" value="Abrir" /><input type="hidden" name="pegar"
+                                            value="<?=$row['numero'];?>" /></td>
+                                </tr>
                             </form>
                             <?php } ?>
 
