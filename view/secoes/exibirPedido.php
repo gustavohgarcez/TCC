@@ -160,7 +160,6 @@
                                                                 <th scope="col">Ação</th>
                                                                 <th scope="col">Responsável</th>
                                                                 <th scope="col">Data</th>
-                                                                <th scope="col">Tempo</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -234,7 +233,7 @@
 
                     <!--Cartões Laterais-->
                     <div class="col-sm-3">
-                        <!--Timer-->
+                        <!--Timer
                         <div class="col-12 btn-align">
                             <button type="button" class="btn btn-outline-dark me-3 col-12" disabled>
                                 <span id="counter">00:00:00</span><br>
@@ -250,12 +249,13 @@
                                     <input class="col-12" type="button" value="Parar" onclick="para(); zera();">
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
+
+                        <div class="space65"></div>
 
                         <div class="line"></div>
 
-                        <p class="comment1">Avançar Etapa:</p>
-                        <div class="space10"></div>
+                        <div class="space15"></div>
 
                         <?php 
                     //mostra próximas etapas//
@@ -336,7 +336,7 @@
                             </button>
                         </div>
 
-                        <div class="space10"></div>
+                        <div class="space15"></div>
                         <div class="line"></div>
                         <div class="space10"></div>
 

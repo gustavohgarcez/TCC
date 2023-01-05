@@ -10,7 +10,7 @@
 	$_SESSION['funcionario']=$login;
 
 	if($linhas == 0){
-		echo '<script>alert("Usuário ou Senha do Adm não cadastrado ou incorreto(s) ");</script>';	
+		echo '<script>alert("Usuário ou Senha incorreto(s), revise os dados e tente novamente!");</script>';	
 		echo "<script>location = 'login.php';</script>";
 	}else{
 		
